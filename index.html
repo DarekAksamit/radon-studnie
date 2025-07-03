@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_06fc3c87f4ab81aca9b769a772d69a42 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/python-visualization/folium@main/folium/templates/leaflet_heat.min.js"></script>
+</head>
+<body>
+    
+    
+<div style="
+    position: fixed;
+    bottom: 100px;
+    left: 20px;
+    z-index:9999;
+    background-color:white;
+    padding:10px;
+    border:2px solid gray;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    ">
+<b>Legenda kolorów - znaczniki (Bq/l):</b><br>
+<svg width="20" height="10"><rect width="20" height="10" style="fill:green"/></svg> 0–10<br>
+<svg width="20" height="10"><rect width="20" height="10" style="fill:yellow"/></svg> 10–20<br>
+<svg width="20" height="10"><rect width="20" height="10" style="fill:orange"/></svg> 20–30<br>
+<svg width="20" height="10"><rect width="20" height="10" style="fill:red"/></svg> 30+
+</div>
+    
+<div style="
+    position: fixed;
+    bottom: 500px;
+    left: 20px;
+    width: 20px;
+    height: 240px;
+    background: linear-gradient(to top, green, yellow, orange, red);
+    border: 2px solid gray;
+    z-index:9999;
+    text-align: center;
+    font-size: 10px;
+    color: black;
+    padding: 4px;
+">
+    <div style="position: absolute; bottom: 10px; left: 5px;">0</div>
+    <div style="position: absolute; bottom: 70px; left: 5px;">10</div>
+    <div style="position: absolute; bottom: 130px; left: 5px;">20</div>
+    <div style="position: absolute; bottom: 190px; left: 5px;">30</div>
+    <div style="position: absolute; top: 5px; left: 5px;">40+</div>
+</div>
+    <div style="position: fixed; top: 10px; right: 10px; width: 400px; 
+            background-color: white; z-index: 9999; padding: 10px; 
+            border: 2px solid grey; font-size: 14px; box-shadow: 2px 2px 6px rgba(0,0,0,0.2);">
+
+  <div style="text-align: center;">
+    <img src="logo_pw.jpg" alt="PW" height="40" style="margin: 5px;">
+    <img src="logo_ahs.jpg" alt="AHS" height="40" style="margin: 5px;">
+  </div>
+
+  <div style="margin-top: 5px;">
+    <button onclick="showDisclaimer('pl')">PL</button>
+    <button onclick="showDisclaimer('en')">EN</button>
+  </div>
+
+  <div id="disclaimer-pl" class="disclaimer-text" style="margin-top: 10px; display: none;">
+    <p>Praca powstała jako kontynuacja grantu nauki obywatelskiej <strong>AHS Radon Hunt</strong> przyznanego <a href='https://akademeia.edu.pl/' target='_blank'>Akademia High School</a> przez konsorcjum <a href='https://www.radonorm.eu' target='_blank'>RadoNorm</a> i stanowi część przygotowań realizacji projektu Erasmus+: <strong>Citizen Science for Radiation Protection</strong> złożonego przez <a href='https://pw.edu.pl/' target='_blank'>Politechnikę Warszawską</a>.</p?
+<p>Zaprezentowane dane pochodzą z pracy inżynierskiej realizowanej we współpracy z <a href='https://www.clor.waw.pl' target='_blank'>Centralnym Laboratorium Ochrony Radiologicznej</a> (Rozicki, 2018), podziękowania: Katarzyna Wołoszczuk, oraz w ramach pomiarów wykonaych przez <a href='https://radiometria.gig.eu' target='_blank'>Śląskie Centrum Radiometrii Środowiskowej</a> (Aksamit-2023, Aksamit-Podgorska-2024), podziękowania: Michał Bończyk.</p>
+<p>Dane: Dariusz Aksamit, Zuzanna Podgórska, Kamil Rózicki. Wizualizacja: Dariusz Aksamit.</p>
+    <p><i>Licencja: CC-BY 4.0</i></p>
+    <img src="CC_BY.png" alt="CC-BY" height="30">
+
+  </div>
+
+  <div id="disclaimer-en" class="disclaimer-text" style="margin-top: 10px; display: block;">
+   <p>This work was developed as a continuation of the citizen science grant <strong>AHS Radon Hunt</strong> awarded to <a href='https://akademeia.edu.pl/' target='_blank'>Akademeia High School</a> by the <a href='https://www.radonorm.eu' target='_blank'>RadoNorm</a> consortium, and forms part of the preparations for the Erasmus+ project: <strong>Citizen Science for Radiation Protection</strong> submitted by the <a href='https://pw.edu.pl/' target='_blank'>Warsaw University of Technology</a>.</p> <p>The presented data comes from an engineering thesis conducted in cooperation with the <a href='https://www.clor.waw.pl' target='_blank'>Central Laboratory for Radiological Protection</a> (Rozicki, 2018), acknowledgements: Katarzyna Wołoszczuk, and from measurements carried out by the <a href='https://radiometria.gig.eu' target='_blank'>Silesian Center for Environmental Radiometry</a> (Aksamit-2023, Aksamit-Podgorska-2024), acknowledgements: Michał Bończyk.</p>
+<p>Data: Dariusz Aksamit, Zuzanna Podgórska, Kamil Rózicki. Visualization: Dariusz Aksamit.</p>
+        <p><i>License: CC-BY 4.0</i></p>
+    <img src="CC_BY.png" alt="CC-BY" height="30">
+
+  </div>
+</div>
+
+<script>
+function showDisclaimer(lang) {
+  document.querySelectorAll('.disclaimer-text').forEach(div => div.style.display = 'none');
+  document.getElementById('disclaimer-' + lang).style.display = 'block';
+}
+</script>
+    
+            <div class="folium-map" id="map_06fc3c87f4ab81aca9b769a772d69a42" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_06fc3c87f4ab81aca9b769a772d69a42 = L.map(
+                "map_06fc3c87f4ab81aca9b769a772d69a42",
+                {
+                    center: [52.2297, 21.0122],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 13,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+            L.control.scale().addTo(map_06fc3c87f4ab81aca9b769a772d69a42);
+
+            
+
+        
+    
+            var tile_layer_7518352a4f1bffa378152b89a3838093 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_7518352a4f1bffa378152b89a3838093.addTo(map_06fc3c87f4ab81aca9b769a772d69a42);
+        
+    
+            var feature_group_ad7cd8a24cc836976f8174e2c7d44a0e = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_cluster_5c3adef5f8ab403e9e44abaf5786583e = L.markerClusterGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_5c58c56d17fa664713e6fcd6a3fec53d = L.circleMarker(
+                [52.15770483456918, 21.046892013242815],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c3adef5f8ab403e9e44abaf5786583e);
+        
+    
+        var popup_4768810191fc95bb65cb5756b940ad00 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_ee4590b63ed2aa2e1680e9a6ac7b4940 = $(`<div id="html_ee4590b63ed2aa2e1680e9a6ac7b4940" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W47<br>         <b>Nazwa:</b> Ciszewskiego 10<br>         <b>Dzielnica:</b> Ursynów<br>         <b>Stężenie radonu:</b> 32.7 Bq/l<br>         <b>Niepewność:</b> ±9.9<br>         <b>Data:</b> Aksamit 2023<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_4768810191fc95bb65cb5756b940ad00.setContent(html_ee4590b63ed2aa2e1680e9a6ac7b4940);
+            
+        
+
+        circle_marker_5c58c56d17fa664713e6fcd6a3fec53d.bindPopup(popup_4768810191fc95bb65cb5756b940ad00)
+        ;
+
+        
+    
+    
+            var circle_marker_9ca433b8dbaacf79f375529962dbc9ac = L.circleMarker(
+                [52.15518440731979, 21.029443515263598],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c3adef5f8ab403e9e44abaf5786583e);
+        
+    
+        var popup_f87657637e783f4b143c5c72e96f59d0 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_18d28fd78ed37488188baedaed0a60af = $(`<div id="html_18d28fd78ed37488188baedaed0a60af" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W49<br>         <b>Nazwa:</b> Romera 2<br>         <b>Dzielnica:</b> Ursynów<br>         <b>Stężenie radonu:</b> 12.6 Bq/l<br>         <b>Niepewność:</b> ±3.85<br>         <b>Data:</b> Aksamit 2023<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_f87657637e783f4b143c5c72e96f59d0.setContent(html_18d28fd78ed37488188baedaed0a60af);
+            
+        
+
+        circle_marker_9ca433b8dbaacf79f375529962dbc9ac.bindPopup(popup_f87657637e783f4b143c5c72e96f59d0)
+        ;
+
+        
+    
+    
+            var circle_marker_6145d23e6d800789f7349e286a737622 = L.circleMarker(
+                [52.203240293219345, 20.92295549891925],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_5c3adef5f8ab403e9e44abaf5786583e);
+        
+    
+        var popup_eb717a21e1af0cdedd43ba01a477b229 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_d3525490602a9631a67dcb67a83e023c = $(`<div id="html_d3525490602a9631a67dcb67a83e023c" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W53<br>         <b>Nazwa:</b> Cietrzewia<br>         <b>Dzielnica:</b> Włochy<br>         <b>Stężenie radonu:</b> 4.3 Bq/l<br>         <b>Niepewność:</b> ±1.45<br>         <b>Data:</b> Aksamit 2023<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_eb717a21e1af0cdedd43ba01a477b229.setContent(html_d3525490602a9631a67dcb67a83e023c);
+            
+        
+
+        circle_marker_6145d23e6d800789f7349e286a737622.bindPopup(popup_eb717a21e1af0cdedd43ba01a477b229)
+        ;
+
+        
+    
+    
+            marker_cluster_5c3adef5f8ab403e9e44abaf5786583e.addTo(feature_group_ad7cd8a24cc836976f8174e2c7d44a0e);
+        
+    
+            feature_group_ad7cd8a24cc836976f8174e2c7d44a0e.addTo(map_06fc3c87f4ab81aca9b769a772d69a42);
+        
+    
+            var feature_group_d8608060039f77c1eba6a7f9b3a847bd = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_cluster_39770515a300b9c74544a63e0644510a = L.markerClusterGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_2a8bc9eac10cced774031f274bb4974b = L.circleMarker(
+                [52.31396194835763, 20.95756682602714],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_39770515a300b9c74544a63e0644510a);
+        
+    
+        var popup_ef66d1496f9b07bb0c0873f337f3813c = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_089c99c29946570c1b7288389fde491d = $(`<div id="html_089c99c29946570c1b7288389fde491d" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W14<br>         <b>Nazwa:</b> Pojarów 1A<br>         <b>Dzielnica:</b> Białołęka<br>         <b>Stężenie radonu:</b> 6.3 Bq/l<br>         <b>Niepewność:</b> ±1.9<br>         <b>Data:</b> Aksamit-Podgorska 2024<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_ef66d1496f9b07bb0c0873f337f3813c.setContent(html_089c99c29946570c1b7288389fde491d);
+            
+        
+
+        circle_marker_2a8bc9eac10cced774031f274bb4974b.bindPopup(popup_ef66d1496f9b07bb0c0873f337f3813c)
+        ;
+
+        
+    
+    
+            var circle_marker_7410ed8f0edc42f33044cd5dd3b91347 = L.circleMarker(
+                [52.24643925743451, 21.104286305976704],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_39770515a300b9c74544a63e0644510a);
+        
+    
+        var popup_5feae5cb373a284842ea3270af7fec29 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_2f7ec287783b8e2fd14295480971844c = $(`<div id="html_2f7ec287783b8e2fd14295480971844c" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W29<br>         <b>Nazwa:</b> Szaserów 79<br>         <b>Dzielnica:</b> Praga-Południe<br>         <b>Stężenie radonu:</b> 14.3 Bq/l<br>         <b>Niepewność:</b> ±4.2<br>         <b>Data:</b> Aksamit-Podgorska 2024<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_5feae5cb373a284842ea3270af7fec29.setContent(html_2f7ec287783b8e2fd14295480971844c);
+            
+        
+
+        circle_marker_7410ed8f0edc42f33044cd5dd3b91347.bindPopup(popup_5feae5cb373a284842ea3270af7fec29)
+        ;
+
+        
+    
+    
+            var circle_marker_26f1ce0ad7318e64a157e2feb922dd99 = L.circleMarker(
+                [52.23648734071179, 21.062078312901857],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_39770515a300b9c74544a63e0644510a);
+        
+    
+        var popup_43a98a1faeb7f004f303c129c0e2ce14 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_e2852e62c8c4ffc570ca2d4318598b1a = $(`<div id="html_e2852e62c8c4ffc570ca2d4318598b1a" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W30<br>         <b>Nazwa:</b> Walecznych 59<br>         <b>Dzielnica:</b> Praga-Południe<br>         <b>Stężenie radonu:</b> 7.0 Bq/l<br>         <b>Niepewność:</b> ±2.1<br>         <b>Data:</b> Aksamit-Podgorska 2024<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_43a98a1faeb7f004f303c129c0e2ce14.setContent(html_e2852e62c8c4ffc570ca2d4318598b1a);
+            
+        
+
+        circle_marker_26f1ce0ad7318e64a157e2feb922dd99.bindPopup(popup_43a98a1faeb7f004f303c129c0e2ce14)
+        ;
+
+        
+    
+    
+            var circle_marker_3412badfb88c0da774cdb1bb1b607a92 = L.circleMarker(
+                [52.28913464653075, 21.026762119393354],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_39770515a300b9c74544a63e0644510a);
+        
+    
+        var popup_b9a5c331e6d6a6dad596651ccde488e4 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_5c0364e37e3fc9a02b193110ebabbbc5 = $(`<div id="html_5c0364e37e3fc9a02b193110ebabbbc5" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W43<br>         <b>Nazwa:</b> Poborzańska<br>         <b>Dzielnica:</b> Targówek<br>         <b>Stężenie radonu:</b> 12.7 Bq/l<br>         <b>Niepewność:</b> ±3.8<br>         <b>Data:</b> Aksamit-Podgorska 2024<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_b9a5c331e6d6a6dad596651ccde488e4.setContent(html_5c0364e37e3fc9a02b193110ebabbbc5);
+            
+        
+
+        circle_marker_3412badfb88c0da774cdb1bb1b607a92.bindPopup(popup_b9a5c331e6d6a6dad596651ccde488e4)
+        ;
+
+        
+    
+    
+            var circle_marker_5d3067673ebc9dd57eb4294540b88ddf = L.circleMarker(
+                [52.295768056340236, 21.029441347421074],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_39770515a300b9c74544a63e0644510a);
+        
+    
+        var popup_e1a11714a98b845a4fecd5e8c1d3b6f4 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_8627654a6ddde9c19567d01ae6fb361e = $(`<div id="html_8627654a6ddde9c19567d01ae6fb361e" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W44<br>         <b>Nazwa:</b> Suwalska<br>         <b>Dzielnica:</b> Targówek<br>         <b>Stężenie radonu:</b> 9.5 Bq/l<br>         <b>Niepewność:</b> ±2.8<br>         <b>Data:</b> Aksamit-Podgorska 2024<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_e1a11714a98b845a4fecd5e8c1d3b6f4.setContent(html_8627654a6ddde9c19567d01ae6fb361e);
+            
+        
+
+        circle_marker_5d3067673ebc9dd57eb4294540b88ddf.bindPopup(popup_e1a11714a98b845a4fecd5e8c1d3b6f4)
+        ;
+
+        
+    
+    
+            var circle_marker_a51af401ead46d609ee651d382ceaaf0 = L.circleMarker(
+                [52.1577627052955, 21.046853673713454],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_39770515a300b9c74544a63e0644510a);
+        
+    
+        var popup_c5dd21bc11ab04d553862b6481b083a9 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_4caf7d2f790221988923f58fd0e0c954 = $(`<div id="html_4caf7d2f790221988923f58fd0e0c954" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W47<br>         <b>Nazwa:</b> Ciszewskiego 10<br>         <b>Dzielnica:</b> Ursynów<br>         <b>Stężenie radonu:</b> 34.6 Bq/l<br>         <b>Niepewność:</b> ±10.4<br>         <b>Data:</b> Aksamit-Podgorska 2024<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_c5dd21bc11ab04d553862b6481b083a9.setContent(html_4caf7d2f790221988923f58fd0e0c954);
+            
+        
+
+        circle_marker_a51af401ead46d609ee651d382ceaaf0.bindPopup(popup_c5dd21bc11ab04d553862b6481b083a9)
+        ;
+
+        
+    
+    
+            var circle_marker_98500846fbfff4dafb1dfb47b1b90878 = L.circleMarker(
+                [52.15519746399134, 21.029441067516508],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_39770515a300b9c74544a63e0644510a);
+        
+    
+        var popup_58f431dc2ce20b4a0de16ab0d104120e = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_492fdaad894ff29ad20e710515b7230f = $(`<div id="html_492fdaad894ff29ad20e710515b7230f" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W49<br>         <b>Nazwa:</b> Romera 2<br>         <b>Dzielnica:</b> Ursynów<br>         <b>Stężenie radonu:</b> 23.8 Bq/l<br>         <b>Niepewność:</b> ±7.1<br>         <b>Data:</b> Aksamit-Podgorska 2024<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_58f431dc2ce20b4a0de16ab0d104120e.setContent(html_492fdaad894ff29ad20e710515b7230f);
+            
+        
+
+        circle_marker_98500846fbfff4dafb1dfb47b1b90878.bindPopup(popup_58f431dc2ce20b4a0de16ab0d104120e)
+        ;
+
+        
+    
+    
+            marker_cluster_39770515a300b9c74544a63e0644510a.addTo(feature_group_d8608060039f77c1eba6a7f9b3a847bd);
+        
+    
+            feature_group_d8608060039f77c1eba6a7f9b3a847bd.addTo(map_06fc3c87f4ab81aca9b769a772d69a42);
+        
+    
+            var feature_group_52379521bb1a992839971968187fa359 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9 = L.markerClusterGroup(
+                {
+}
+            );
+        
+    
+            var circle_marker_54d44badc543d6c2f3bd6279f2ab6190 = L.circleMarker(
+                [52.22888406938869, 20.917305447997528],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_6fbc0d590ef6b1cbf3ad18a1fc7ab6d4 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_6de77524738eb7d3d0cc0d898e96134c = $(`<div id="html_6de77524738eb7d3d0cc0d898e96134c" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W1<br>         <b>Nazwa:</b> Anieli Krzywoń<br>         <b>Dzielnica:</b> Bemowo<br>         <b>Stężenie radonu:</b> 13.913 Bq/l<br>         <b>Niepewność:</b> ±1.216<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_6fbc0d590ef6b1cbf3ad18a1fc7ab6d4.setContent(html_6de77524738eb7d3d0cc0d898e96134c);
+            
+        
+
+        circle_marker_54d44badc543d6c2f3bd6279f2ab6190.bindPopup(popup_6fbc0d590ef6b1cbf3ad18a1fc7ab6d4)
+        ;
+
+        
+    
+    
+            var circle_marker_29c9f5580cff40a360a3aa270dbc6ea8 = L.circleMarker(
+                [52.24928928695373, 20.880268683189332],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_6bcba89e071e807eda697d2f328736e8 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_40de0ff02e8d4caec81a3451f3238b23 = $(`<div id="html_40de0ff02e8d4caec81a3451f3238b23" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W2<br>         <b>Nazwa:</b> Bolimowska<br>         <b>Dzielnica:</b> Bemowo<br>         <b>Stężenie radonu:</b> 2.16 Bq/l<br>         <b>Niepewność:</b> ±0.246<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_6bcba89e071e807eda697d2f328736e8.setContent(html_40de0ff02e8d4caec81a3451f3238b23);
+            
+        
+
+        circle_marker_29c9f5580cff40a360a3aa270dbc6ea8.bindPopup(popup_6bcba89e071e807eda697d2f328736e8)
+        ;
+
+        
+    
+    
+            var circle_marker_c9c66f4361ed368a096ada9d1afad7a2 = L.circleMarker(
+                [52.22970626489979, 20.907192282686847],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_17e01e08650db480b0871dfa8d29e5e1 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_bf977fc14098da1fcb9ee154de89a116 = $(`<div id="html_bf977fc14098da1fcb9ee154de89a116" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W3<br>         <b>Nazwa:</b> Borowego<br>         <b>Dzielnica:</b> Bemowo<br>         <b>Stężenie radonu:</b> 6.508 Bq/l<br>         <b>Niepewność:</b> ±0.663<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_17e01e08650db480b0871dfa8d29e5e1.setContent(html_bf977fc14098da1fcb9ee154de89a116);
+            
+        
+
+        circle_marker_c9c66f4361ed368a096ada9d1afad7a2.bindPopup(popup_17e01e08650db480b0871dfa8d29e5e1)
+        ;
+
+        
+    
+    
+            var circle_marker_01a01f6cfa719db81e08f35bb2a55280 = L.circleMarker(
+                [52.24341097324249, 20.91474088632615],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_4f1d5e05aeb62d0526d87216c74b3318 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_22f40a455a65fd5fc1d8f9933c10a723 = $(`<div id="html_22f40a455a65fd5fc1d8f9933c10a723" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W4<br>         <b>Nazwa:</b> Kazubów<br>         <b>Dzielnica:</b> Bemowo<br>         <b>Stężenie radonu:</b> 10.778 Bq/l<br>         <b>Niepewność:</b> ±0.996<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_4f1d5e05aeb62d0526d87216c74b3318.setContent(html_22f40a455a65fd5fc1d8f9933c10a723);
+            
+        
+
+        circle_marker_01a01f6cfa719db81e08f35bb2a55280.bindPopup(popup_4f1d5e05aeb62d0526d87216c74b3318)
+        ;
+
+        
+    
+    
+            var circle_marker_8822f7aec14471e59234f4c107299ca7 = L.circleMarker(
+                [52.26076812016416, 20.919661702088938],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_c969311a67d1a9aa81bb460deda2e4bb = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_c02abd2bc676170e15e6df8110577144 = $(`<div id="html_c02abd2bc676170e15e6df8110577144" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W5<br>         <b>Nazwa:</b> Morcinka<br>         <b>Dzielnica:</b> Bemowo<br>         <b>Stężenie radonu:</b> 1.815 Bq/l<br>         <b>Niepewność:</b> ±0.206<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_c969311a67d1a9aa81bb460deda2e4bb.setContent(html_c02abd2bc676170e15e6df8110577144);
+            
+        
+
+        circle_marker_8822f7aec14471e59234f4c107299ca7.bindPopup(popup_c969311a67d1a9aa81bb460deda2e4bb)
+        ;
+
+        
+    
+    
+            var circle_marker_ce7bac0d1143d7a6a3853877b6a567d4 = L.circleMarker(
+                [52.234113613050475, 20.910403157537075],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_dbeadd30a14cbe477c167a20fa4bc319 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_710a2c3af1204d0ab95bf4464014a37a = $(`<div id="html_710a2c3af1204d0ab95bf4464014a37a" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W6<br>         <b>Nazwa:</b> Powstańców Śląskich 67B<br>         <b>Dzielnica:</b> Bemowo<br>         <b>Stężenie radonu:</b> 5.697 Bq/l<br>         <b>Niepewność:</b> ±0.59<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_dbeadd30a14cbe477c167a20fa4bc319.setContent(html_710a2c3af1204d0ab95bf4464014a37a);
+            
+        
+
+        circle_marker_ce7bac0d1143d7a6a3853877b6a567d4.bindPopup(popup_dbeadd30a14cbe477c167a20fa4bc319)
+        ;
+
+        
+    
+    
+            var circle_marker_851a9a7bca2544a9d8850b08a07c5e99 = L.circleMarker(
+                [52.22546835281935, 20.90245840181124],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_7ec4ca307ae0458e4e7cc43aa272e508 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_09c64ea96ab07ae5c3c8ef218ba338af = $(`<div id="html_09c64ea96ab07ae5c3c8ef218ba338af" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W7<br>         <b>Nazwa:</b> Rozłogi 12A<br>         <b>Dzielnica:</b> Bemowo<br>         <b>Stężenie radonu:</b> 4.957 Bq/l<br>         <b>Niepewność:</b> ±0.525<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_7ec4ca307ae0458e4e7cc43aa272e508.setContent(html_09c64ea96ab07ae5c3c8ef218ba338af);
+            
+        
+
+        circle_marker_851a9a7bca2544a9d8850b08a07c5e99.bindPopup(popup_7ec4ca307ae0458e4e7cc43aa272e508)
+        ;
+
+        
+    
+    
+            var circle_marker_a3810dac5d0e61a01de2f78e73144185 = L.circleMarker(
+                [52.22209991892985, 20.901311790788224],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_57256a5fd77c5f19a84d84656d8a1552 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_b7c98efb8f180d0ea6d686d38041444c = $(`<div id="html_b7c98efb8f180d0ea6d686d38041444c" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W8<br>         <b>Nazwa:</b> Rozłogi 2A<br>         <b>Dzielnica:</b> Bemowo<br>         <b>Stężenie radonu:</b> 2.841 Bq/l<br>         <b>Niepewność:</b> ±0.314<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_57256a5fd77c5f19a84d84656d8a1552.setContent(html_b7c98efb8f180d0ea6d686d38041444c);
+            
+        
+
+        circle_marker_a3810dac5d0e61a01de2f78e73144185.bindPopup(popup_57256a5fd77c5f19a84d84656d8a1552)
+        ;
+
+        
+    
+    
+            var circle_marker_19da4adced4196513f7fec5a1335edae = L.circleMarker(
+                [52.2236248383263, 20.915641312316502],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_4c933d8e06278f4fc579e0c1f9ba2cbc = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_cda951b6f13f3d5b86987d8d33246f98 = $(`<div id="html_cda951b6f13f3d5b86987d8d33246f98" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W9<br>         <b>Nazwa:</b> Sternicza (r. Powstańców Śląskich)<br>         <b>Dzielnica:</b> Bemowo<br>         <b>Stężenie radonu:</b> 7.437 Bq/l<br>         <b>Niepewność:</b> ±0.74<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_4c933d8e06278f4fc579e0c1f9ba2cbc.setContent(html_cda951b6f13f3d5b86987d8d33246f98);
+            
+        
+
+        circle_marker_19da4adced4196513f7fec5a1335edae.bindPopup(popup_4c933d8e06278f4fc579e0c1f9ba2cbc)
+        ;
+
+        
+    
+    
+            var circle_marker_ed64194b3c45d5be6a43017abbb60df3 = L.circleMarker(
+                [52.2198903774183, 20.89918326645351],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_6865511500533c8870bffd681d6f9f08 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_d022031b6d834381f53554dc2601cad8 = $(`<div id="html_d022031b6d834381f53554dc2601cad8" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W10<br>         <b>Nazwa:</b> Sternicza 125<br>         <b>Dzielnica:</b> Bemowo<br>         <b>Stężenie radonu:</b> 4.268 Bq/l<br>         <b>Niepewność:</b> ±0.459<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_6865511500533c8870bffd681d6f9f08.setContent(html_d022031b6d834381f53554dc2601cad8);
+            
+        
+
+        circle_marker_ed64194b3c45d5be6a43017abbb60df3.bindPopup(popup_6865511500533c8870bffd681d6f9f08)
+        ;
+
+        
+    
+    
+            var circle_marker_da06ac5762ae2dd833480fbf0f738b32 = L.circleMarker(
+                [52.23654995024218, 20.899794980107874],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_928a74f30a40742dedbd8a5698a6f88e = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_25cc2715e35e7e2a3219f097ec92659e = $(`<div id="html_25cc2715e35e7e2a3219f097ec92659e" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W11<br>         <b>Nazwa:</b> Szobera<br>         <b>Dzielnica:</b> Bemowo<br>         <b>Stężenie radonu:</b> 4.993 Bq/l<br>         <b>Niepewność:</b> ±0.526<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_928a74f30a40742dedbd8a5698a6f88e.setContent(html_25cc2715e35e7e2a3219f097ec92659e);
+            
+        
+
+        circle_marker_da06ac5762ae2dd833480fbf0f738b32.bindPopup(popup_928a74f30a40742dedbd8a5698a6f88e)
+        ;
+
+        
+    
+    
+            var circle_marker_7757290151f455dad14e7c370d9096a3 = L.circleMarker(
+                [52.230083431504205, 20.898494879610038],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_e80edd803b2265634b21ef34c5053cf2 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_dfcc3187fc5180839526f6b484b49933 = $(`<div id="html_dfcc3187fc5180839526f6b484b49933" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W12<br>         <b>Nazwa:</b> Wyki 19<br>         <b>Dzielnica:</b> Bemowo<br>         <b>Stężenie radonu:</b> 23.333 Bq/l<br>         <b>Niepewność:</b> ±1.771<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_e80edd803b2265634b21ef34c5053cf2.setContent(html_dfcc3187fc5180839526f6b484b49933);
+            
+        
+
+        circle_marker_7757290151f455dad14e7c370d9096a3.bindPopup(popup_e80edd803b2265634b21ef34c5053cf2)
+        ;
+
+        
+    
+    
+            var circle_marker_c9514afdd09b65a67ed0502c06a159e6 = L.circleMarker(
+                [52.32460673724863, 20.947734563583197],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_a36e2d959643da3daa35f9b83c9ec5dc = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_2f0db12eea5169b189d66f5b6c225038 = $(`<div id="html_2f0db12eea5169b189d66f5b6c225038" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W13<br>         <b>Nazwa:</b> Mehoffera<br>         <b>Dzielnica:</b> Białołęka<br>         <b>Stężenie radonu:</b> 12.275 Bq/l<br>         <b>Niepewność:</b> ±1.047<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_a36e2d959643da3daa35f9b83c9ec5dc.setContent(html_2f0db12eea5169b189d66f5b6c225038);
+            
+        
+
+        circle_marker_c9514afdd09b65a67ed0502c06a159e6.bindPopup(popup_a36e2d959643da3daa35f9b83c9ec5dc)
+        ;
+
+        
+    
+    
+            var circle_marker_5d594d7f9ed9a1dd917425d8ef89c3ab = L.circleMarker(
+                [52.31395718514792, 20.95761223530274],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_0b433b4b5bbd87cd15d5e5b872ffa4fd = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_d2ceddcd1b0f1a3fa0cfdec33547a9c5 = $(`<div id="html_d2ceddcd1b0f1a3fa0cfdec33547a9c5" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W14<br>         <b>Nazwa:</b> Pojarów 1A<br>         <b>Dzielnica:</b> Białołęka<br>         <b>Stężenie radonu:</b> 12.485 Bq/l<br>         <b>Niepewność:</b> ±1.226<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_0b433b4b5bbd87cd15d5e5b872ffa4fd.setContent(html_d2ceddcd1b0f1a3fa0cfdec33547a9c5);
+            
+        
+
+        circle_marker_5d594d7f9ed9a1dd917425d8ef89c3ab.bindPopup(popup_0b433b4b5bbd87cd15d5e5b872ffa4fd)
+        ;
+
+        
+    
+    
+            var circle_marker_d13b8fd6ab527375f6ff5a3a1fb394a5 = L.circleMarker(
+                [52.30855003177879, 20.92418041374525],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_097bad0707fc3c60eb127b8bcfdb7867 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_2482223e4f8019f475be7490469c96b0 = $(`<div id="html_2482223e4f8019f475be7490469c96b0" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W15<br>         <b>Nazwa:</b> Dzierżoniowska 7<br>         <b>Dzielnica:</b> Bielany<br>         <b>Stężenie radonu:</b> 10.947 Bq/l<br>         <b>Niepewność:</b> ±1.035<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_097bad0707fc3c60eb127b8bcfdb7867.setContent(html_2482223e4f8019f475be7490469c96b0);
+            
+        
+
+        circle_marker_d13b8fd6ab527375f6ff5a3a1fb394a5.bindPopup(popup_097bad0707fc3c60eb127b8bcfdb7867)
+        ;
+
+        
+    
+    
+            var circle_marker_2a463f2d57eca2c53fa62bf748890cf0 = L.circleMarker(
+                [52.30055029162544, 20.88155876930169],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_eb6c79e9f00a2569c2480b0c3ef1fc24 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_20a2bfb3f062cee0fbc17254d0c93e5d = $(`<div id="html_20a2bfb3f062cee0fbc17254d0c93e5d" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W16<br>         <b>Nazwa:</b> Estrady 112<br>         <b>Dzielnica:</b> Bielany<br>         <b>Stężenie radonu:</b> 5.24 Bq/l<br>         <b>Niepewność:</b> ±0.553<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_eb6c79e9f00a2569c2480b0c3ef1fc24.setContent(html_20a2bfb3f062cee0fbc17254d0c93e5d);
+            
+        
+
+        circle_marker_2a463f2d57eca2c53fa62bf748890cf0.bindPopup(popup_eb6c79e9f00a2569c2480b0c3ef1fc24)
+        ;
+
+        
+    
+    
+            var circle_marker_5c189b2ecdca6fa7823ccb90f5b26eb2 = L.circleMarker(
+                [52.27254330217488, 20.958620661305282],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_7f8e2b58fc6fbe4ebe2995ff99afef8e = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_935a9b0f6277cb3f02a67d2d2b332bf0 = $(`<div id="html_935a9b0f6277cb3f02a67d2d2b332bf0" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W17<br>         <b>Nazwa:</b> Gąbińska 30<br>         <b>Dzielnica:</b> Bielany<br>         <b>Stężenie radonu:</b> 13.611 Bq/l<br>         <b>Niepewność:</b> ±1.245<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_7f8e2b58fc6fbe4ebe2995ff99afef8e.setContent(html_935a9b0f6277cb3f02a67d2d2b332bf0);
+            
+        
+
+        circle_marker_5c189b2ecdca6fa7823ccb90f5b26eb2.bindPopup(popup_7f8e2b58fc6fbe4ebe2995ff99afef8e)
+        ;
+
+        
+    
+    
+            var circle_marker_8010fd50d186b0ef5eaa28da651fddfc = L.circleMarker(
+                [52.281177796099136, 20.976885085362362],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_f6cb1c76b7846b6927b8ea34eb3e2f5b = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_ea35c0e1fcb46d980a536263bd806012 = $(`<div id="html_ea35c0e1fcb46d980a536263bd806012" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W18<br>         <b>Nazwa:</b> Klaudyny 18A<br>         <b>Dzielnica:</b> Bielany<br>         <b>Stężenie radonu:</b> 3.046 Bq/l<br>         <b>Niepewność:</b> ±0.336<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_f6cb1c76b7846b6927b8ea34eb3e2f5b.setContent(html_ea35c0e1fcb46d980a536263bd806012);
+            
+        
+
+        circle_marker_8010fd50d186b0ef5eaa28da651fddfc.bindPopup(popup_f6cb1c76b7846b6927b8ea34eb3e2f5b)
+        ;
+
+        
+    
+    
+            var circle_marker_a8139d14e2f1ce00489a2ca305c5aeec = L.circleMarker(
+                [52.26725712767831, 20.952726476451787],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_6c208adf964c1691f56e4fdeefa89070 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_aaef25a28a81cd3f54dec81069bac901 = $(`<div id="html_aaef25a28a81cd3f54dec81069bac901" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W19<br>         <b>Nazwa:</b> Kochanowskiego 10/12<br>         <b>Dzielnica:</b> Bielany<br>         <b>Stężenie radonu:</b> 7.938 Bq/l<br>         <b>Niepewność:</b> ±0.807<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_6c208adf964c1691f56e4fdeefa89070.setContent(html_aaef25a28a81cd3f54dec81069bac901);
+            
+        
+
+        circle_marker_a8139d14e2f1ce00489a2ca305c5aeec.bindPopup(popup_6c208adf964c1691f56e4fdeefa89070)
+        ;
+
+        
+    
+    
+            var circle_marker_9cb98d17bdf8c4373c8ce9075bddeeec = L.circleMarker(
+                [52.282389318930896, 20.93661432487476],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_93fee7f0cd392925737f8231650962ec = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_b5c5c9d53a249edff6555d565f9721e2 = $(`<div id="html_b5c5c9d53a249edff6555d565f9721e2" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W20<br>         <b>Nazwa:</b> Wolumen 10<br>         <b>Dzielnica:</b> Bielany<br>         <b>Stężenie radonu:</b> 23.066 Bq/l<br>         <b>Niepewność:</b> ±1.857<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_93fee7f0cd392925737f8231650962ec.setContent(html_b5c5c9d53a249edff6555d565f9721e2);
+            
+        
+
+        circle_marker_9cb98d17bdf8c4373c8ce9075bddeeec.bindPopup(popup_93fee7f0cd392925737f8231650962ec)
+        ;
+
+        
+    
+    
+            var circle_marker_f1f1ad2f00d1ba0d8001ed9329e2d838 = L.circleMarker(
+                [52.17181708019483, 21.024167746773024],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_23d974bc704e295ed0039848e6ab6f3e = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_7687eb89d75cb576e48a071176ebd3c1 = $(`<div id="html_7687eb89d75cb576e48a071176ebd3c1" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W21<br>         <b>Nazwa:</b> Batuty 9<br>         <b>Dzielnica:</b> Mokotów<br>         <b>Stężenie radonu:</b> 7.066 Bq/l<br>         <b>Niepewność:</b> ±0.724<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_23d974bc704e295ed0039848e6ab6f3e.setContent(html_7687eb89d75cb576e48a071176ebd3c1);
+            
+        
+
+        circle_marker_f1f1ad2f00d1ba0d8001ed9329e2d838.bindPopup(popup_23d974bc704e295ed0039848e6ab6f3e)
+        ;
+
+        
+    
+    
+            var circle_marker_1969ea6614b247e0980850958af0fa34 = L.circleMarker(
+                [52.18224816867986, 21.048333486596164],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_657e54b8a1c879f6dd4304368261d874 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_bb5beff0977ccdd56c287ee28916ce59 = $(`<div id="html_bb5beff0977ccdd56c287ee28916ce59" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W22<br>         <b>Nazwa:</b> Warneńska 2<br>         <b>Dzielnica:</b> Mokotów<br>         <b>Stężenie radonu:</b> 7.14 Bq/l<br>         <b>Niepewność:</b> ±0.713<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_657e54b8a1c879f6dd4304368261d874.setContent(html_bb5beff0977ccdd56c287ee28916ce59);
+            
+        
+
+        circle_marker_1969ea6614b247e0980850958af0fa34.bindPopup(popup_657e54b8a1c879f6dd4304368261d874)
+        ;
+
+        
+    
+    
+            var circle_marker_fc9cfe876fdb77b3fe1215f42e10ae76 = L.circleMarker(
+                [52.21934869207037, 20.979572808650865],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_483919330727424a4928a6e8c4b0b03d = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_df346b8c94cfbd8b2c07bfaaa33205cc = $(`<div id="html_df346b8c94cfbd8b2c07bfaaa33205cc" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W23<br>         <b>Nazwa:</b> Barska<br>         <b>Dzielnica:</b> Ochota<br>         <b>Stężenie radonu:</b> 5.371 Bq/l<br>         <b>Niepewność:</b> ±0.561<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_483919330727424a4928a6e8c4b0b03d.setContent(html_df346b8c94cfbd8b2c07bfaaa33205cc);
+            
+        
+
+        circle_marker_fc9cfe876fdb77b3fe1215f42e10ae76.bindPopup(popup_483919330727424a4928a6e8c4b0b03d)
+        ;
+
+        
+    
+    
+            var circle_marker_5c754b3ad8a6b0d49bdbc0498a151e43 = L.circleMarker(
+                [52.21424664426914, 20.98164410376054],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_98fa897f3c06a146347b7d693fe70a6b = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_8af7d97591f16d396a245155ba21ef69 = $(`<div id="html_8af7d97591f16d396a245155ba21ef69" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W24<br>         <b>Nazwa:</b> Pasteura 10 <br>         <b>Dzielnica:</b> Ochota<br>         <b>Stężenie radonu:</b> 3.298 Bq/l<br>         <b>Niepewność:</b> ±0.361<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_98fa897f3c06a146347b7d693fe70a6b.setContent(html_8af7d97591f16d396a245155ba21ef69);
+            
+        
+
+        circle_marker_5c754b3ad8a6b0d49bdbc0498a151e43.bindPopup(popup_98fa897f3c06a146347b7d693fe70a6b)
+        ;
+
+        
+    
+    
+            var circle_marker_eff563d9d3abe75491fae509b20c7de2 = L.circleMarker(
+                [52.24303561794833, 21.077408731647203],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_0a95854cd3d98cf29a6a83c38fed4381 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_86f1b0a4726a5f069f7d66d71be07be1 = $(`<div id="html_86f1b0a4726a5f069f7d66d71be07be1" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W25<br>         <b>Nazwa:</b> Grenadierów 51/59<br>         <b>Dzielnica:</b> Praga-Południe<br>         <b>Stężenie radonu:</b> 5.665 Bq/l<br>         <b>Niepewność:</b> ±0.589<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_0a95854cd3d98cf29a6a83c38fed4381.setContent(html_86f1b0a4726a5f069f7d66d71be07be1);
+            
+        
+
+        circle_marker_eff563d9d3abe75491fae509b20c7de2.bindPopup(popup_0a95854cd3d98cf29a6a83c38fed4381)
+        ;
+
+        
+    
+    
+            var circle_marker_f7169a5e837aceedd58f7b519a05d5e4 = L.circleMarker(
+                [52.22801861951719, 21.06786265429044],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_d5c39a845c9b6ade3f27d10c78bd2c1f = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_0884f745cf223e44d87a7b9841cc8314 = $(`<div id="html_0884f745cf223e44d87a7b9841cc8314" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W26<br>         <b>Nazwa:</b> Lizbońska 4<br>         <b>Dzielnica:</b> Praga-Południe<br>         <b>Stężenie radonu:</b> 15.598 Bq/l<br>         <b>Niepewność:</b> ±1.336<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_d5c39a845c9b6ade3f27d10c78bd2c1f.setContent(html_0884f745cf223e44d87a7b9841cc8314);
+            
+        
+
+        circle_marker_f7169a5e837aceedd58f7b519a05d5e4.bindPopup(popup_d5c39a845c9b6ade3f27d10c78bd2c1f)
+        ;
+
+        
+    
+    
+            var circle_marker_7079677696026bc2d209b345b1c2ceb3 = L.circleMarker(
+                [52.239777853129034, 21.086160263508365],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_ce0fedcb96e343fd239bf42ed315d0ec = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_803952cd00e8d7b18175b351e1bf3fd5 = $(`<div id="html_803952cd00e8d7b18175b351e1bf3fd5" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W27<br>         <b>Nazwa:</b> Majdańska<br>         <b>Dzielnica:</b> Praga-Południe<br>         <b>Stężenie radonu:</b> 15.16 Bq/l<br>         <b>Niepewność:</b> ±1.307<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_ce0fedcb96e343fd239bf42ed315d0ec.setContent(html_803952cd00e8d7b18175b351e1bf3fd5);
+            
+        
+
+        circle_marker_7079677696026bc2d209b345b1c2ceb3.bindPopup(popup_ce0fedcb96e343fd239bf42ed315d0ec)
+        ;
+
+        
+    
+    
+            var circle_marker_e803f1e47a98667c1c3ff52dc89fc9da = L.circleMarker(
+                [52.23400961146414, 21.081499706077658],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_ecbf874782a059213537f8ff93639f91 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_1caca8ff8647ab9e76e1d7c708e0ca10 = $(`<div id="html_1caca8ff8647ab9e76e1d7c708e0ca10" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W28<br>         <b>Nazwa:</b> Motorowa<br>         <b>Dzielnica:</b> Praga-Południe<br>         <b>Stężenie radonu:</b> 10.323 Bq/l<br>         <b>Niepewność:</b> ±0.971<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_ecbf874782a059213537f8ff93639f91.setContent(html_1caca8ff8647ab9e76e1d7c708e0ca10);
+            
+        
+
+        circle_marker_e803f1e47a98667c1c3ff52dc89fc9da.bindPopup(popup_ecbf874782a059213537f8ff93639f91)
+        ;
+
+        
+    
+    
+            var circle_marker_c5d9b7e59befbc002f71f1f30c35d1cc = L.circleMarker(
+                [52.246413235185, 21.10431129843188],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_107f6b1ade4ea7a65807cb129183f88e = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_bba0152f3421d70711bae2a8dc6d8b5d = $(`<div id="html_bba0152f3421d70711bae2a8dc6d8b5d" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W29<br>         <b>Nazwa:</b> Szaserów 79<br>         <b>Dzielnica:</b> Praga-Południe<br>         <b>Stężenie radonu:</b> 20.337 Bq/l<br>         <b>Niepewność:</b> ±1.613<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_107f6b1ade4ea7a65807cb129183f88e.setContent(html_bba0152f3421d70711bae2a8dc6d8b5d);
+            
+        
+
+        circle_marker_c5d9b7e59befbc002f71f1f30c35d1cc.bindPopup(popup_107f6b1ade4ea7a65807cb129183f88e)
+        ;
+
+        
+    
+    
+            var circle_marker_162971e59962a5e70a12dc14d0d2faa1 = L.circleMarker(
+                [52.23649326030125, 21.062132658517978],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_94d985cf2e08e0972f233efe9faab984 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_ddd15847e909952b7556c3dd01119121 = $(`<div id="html_ddd15847e909952b7556c3dd01119121" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W30<br>         <b>Nazwa:</b> Walecznych 59<br>         <b>Dzielnica:</b> Praga-Południe<br>         <b>Stężenie radonu:</b> 16.795 Bq/l<br>         <b>Niepewność:</b> ±1.4<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_94d985cf2e08e0972f233efe9faab984.setContent(html_ddd15847e909952b7556c3dd01119121);
+            
+        
+
+        circle_marker_162971e59962a5e70a12dc14d0d2faa1.bindPopup(popup_94d985cf2e08e0972f233efe9faab984)
+        ;
+
+        
+    
+    
+            var circle_marker_1d5a961fa6d035507530efa56a11fc17 = L.circleMarker(
+                [52.25026015921918, 21.027936493650824],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_62ef37f5a727d4b1c0752d1a89ff941c = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_6ef7298a7376d84e66884f226445ed9f = $(`<div id="html_6ef7298a7376d84e66884f226445ed9f" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W31<br>         <b>Nazwa:</b> Panieńska<br>         <b>Dzielnica:</b> Praga-Północ<br>         <b>Stężenie radonu:</b> 10.05 Bq/l<br>         <b>Niepewność:</b> ±0.97<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_62ef37f5a727d4b1c0752d1a89ff941c.setContent(html_6ef7298a7376d84e66884f226445ed9f);
+            
+        
+
+        circle_marker_1d5a961fa6d035507530efa56a11fc17.bindPopup(popup_62ef37f5a727d4b1c0752d1a89ff941c)
+        ;
+
+        
+    
+    
+            var circle_marker_f0830e91f0cc37cae03e398d4c324719 = L.circleMarker(
+                [52.260567064023725, 21.030319463360716],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_53cb420f8edba5cb8f6a5dc752d28ddd = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_bd83af301ccff08cf8e96907bc20922f = $(`<div id="html_bd83af301ccff08cf8e96907bc20922f" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W32<br>         <b>Nazwa:</b> plac Hallera 8A<br>         <b>Dzielnica:</b> Praga-Północ<br>         <b>Stężenie radonu:</b> 4.82 Bq/l<br>         <b>Niepewność:</b> ±0.516<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_53cb420f8edba5cb8f6a5dc752d28ddd.setContent(html_bd83af301ccff08cf8e96907bc20922f);
+            
+        
+
+        circle_marker_f0830e91f0cc37cae03e398d4c324719.bindPopup(popup_53cb420f8edba5cb8f6a5dc752d28ddd)
+        ;
+
+        
+    
+    
+            var circle_marker_851fd695da23814e56821ea24ce02edb = L.circleMarker(
+                [52.261809946917985, 21.04054086049207],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_d9c6ee9a42191e9cda21347468bf1169 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_09c0d1689949dae7db00625b189f81bd = $(`<div id="html_09c0d1689949dae7db00625b189f81bd" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W33<br>         <b>Nazwa:</b> Strzelecka 13<br>         <b>Dzielnica:</b> Praga-Północ<br>         <b>Stężenie radonu:</b> 4.443 Bq/l<br>         <b>Niepewność:</b> ±0.483<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_d9c6ee9a42191e9cda21347468bf1169.setContent(html_09c0d1689949dae7db00625b189f81bd);
+            
+        
+
+        circle_marker_851fd695da23814e56821ea24ce02edb.bindPopup(popup_d9c6ee9a42191e9cda21347468bf1169)
+        ;
+
+        
+    
+    
+            var circle_marker_141824be6814b361f6e29418675bdfcf = L.circleMarker(
+                [52.249173681302146, 20.99860916931086],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_a93e76b20193bb7e033bde9d2582b8b6 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_404ae4d3619b6ad136d83bf9d7ce0167 = $(`<div id="html_404ae4d3619b6ad136d83bf9d7ce0167" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W34<br>         <b>Nazwa:</b> Anielewicza<br>         <b>Dzielnica:</b> Śródmieście<br>         <b>Stężenie radonu:</b> 4.781 Bq/l<br>         <b>Niepewność:</b> ±0.508<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_a93e76b20193bb7e033bde9d2582b8b6.setContent(html_404ae4d3619b6ad136d83bf9d7ce0167);
+            
+        
+
+        circle_marker_141824be6814b361f6e29418675bdfcf.bindPopup(popup_a93e76b20193bb7e033bde9d2582b8b6)
+        ;
+
+        
+    
+    
+            var circle_marker_3b38130358728d6e5d9606bae81c3348 = L.circleMarker(
+                [52.244875647133455, 21.01952998215823],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_c090b55dfac4aff1d0c1685f759dc608 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_e3b8176fcd69658ac50dedb3555bb03c = $(`<div id="html_e3b8176fcd69658ac50dedb3555bb03c" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W35<br>         <b>Nazwa:</b> Furmańska <br>         <b>Dzielnica:</b> Śródmieście<br>         <b>Stężenie radonu:</b> 0.446 Bq/l<br>         <b>Niepewność:</b> ±0.032<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_c090b55dfac4aff1d0c1685f759dc608.setContent(html_e3b8176fcd69658ac50dedb3555bb03c);
+            
+        
+
+        circle_marker_3b38130358728d6e5d9606bae81c3348.bindPopup(popup_c090b55dfac4aff1d0c1685f759dc608)
+        ;
+
+        
+    
+    
+            var circle_marker_8636e4b867b9c9627c8472e815f615ad = L.circleMarker(
+                [52.254923304354065, 20.991189831362963],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_c3a9b367958b30d70ae193312ff063cc = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_aa91ab57c4ee3884ee2e019a900e7c22 = $(`<div id="html_aa91ab57c4ee3884ee2e019a900e7c22" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W36<br>         <b>Nazwa:</b> Inflancka 6<br>         <b>Dzielnica:</b> Śródmieście<br>         <b>Stężenie radonu:</b> 6.732 Bq/l<br>         <b>Niepewność:</b> ±0.688<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_c3a9b367958b30d70ae193312ff063cc.setContent(html_aa91ab57c4ee3884ee2e019a900e7c22);
+            
+        
+
+        circle_marker_8636e4b867b9c9627c8472e815f615ad.bindPopup(popup_c3a9b367958b30d70ae193312ff063cc)
+        ;
+
+        
+    
+    
+            var circle_marker_bb7b786336f7c16c151a27d8a6d7413a = L.circleMarker(
+                [52.230902780894645, 21.028281381158067],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_8e5c58a773521e5b6e038e9cae883942 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_64a318bd8a9f0e53b9122ead92042e73 = $(`<div id="html_64a318bd8a9f0e53b9122ead92042e73" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W37<br>         <b>Nazwa:</b> Książęca<br>         <b>Dzielnica:</b> Śródmieście<br>         <b>Stężenie radonu:</b> 9.163 Bq/l<br>         <b>Niepewność:</b> ±0.906<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_8e5c58a773521e5b6e038e9cae883942.setContent(html_64a318bd8a9f0e53b9122ead92042e73);
+            
+        
+
+        circle_marker_bb7b786336f7c16c151a27d8a6d7413a.bindPopup(popup_8e5c58a773521e5b6e038e9cae883942)
+        ;
+
+        
+    
+    
+            var circle_marker_34bdb51f6055121f5e9f164e6c0029c1 = L.circleMarker(
+                [52.21809740059213, 21.021239707834486],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_6a65b479b87b9b3a205c07b4c6d235de = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_7fba66a8264d711328ff4dd52143d259 = $(`<div id="html_7fba66a8264d711328ff4dd52143d259" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W38<br>         <b>Nazwa:</b> L. Kaczyńskiego 7/9<br>         <b>Dzielnica:</b> Śródmieście<br>         <b>Stężenie radonu:</b> 7.147 Bq/l<br>         <b>Niepewność:</b> ±0.719<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_6a65b479b87b9b3a205c07b4c6d235de.setContent(html_7fba66a8264d711328ff4dd52143d259);
+            
+        
+
+        circle_marker_34bdb51f6055121f5e9f164e6c0029c1.bindPopup(popup_6a65b479b87b9b3a205c07b4c6d235de)
+        ;
+
+        
+    
+    
+            var circle_marker_89fa0439c0c087a7def8beda36b556ab = L.circleMarker(
+                [52.23209233462708, 21.039880149157057],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_ea839fc706431eb0fc9b8370eeb609b0 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_a844b2a596c7c484338694efcb9b372a = $(`<div id="html_a844b2a596c7c484338694efcb9b372a" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W39<br>         <b>Nazwa:</b> Rynek Solecki 18<br>         <b>Dzielnica:</b> Śródmieście<br>         <b>Stężenie radonu:</b> 13.248 Bq/l<br>         <b>Niepewność:</b> ±1.259<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_ea839fc706431eb0fc9b8370eeb609b0.setContent(html_a844b2a596c7c484338694efcb9b372a);
+            
+        
+
+        circle_marker_89fa0439c0c087a7def8beda36b556ab.bindPopup(popup_ea839fc706431eb0fc9b8370eeb609b0)
+        ;
+
+        
+    
+    
+            var circle_marker_024fd43fd241cbb8086fac309efee8fa = L.circleMarker(
+                [52.22427190570385, 21.012103091317638],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_291952b425393ec2a8b192998e05046c = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_33c24c9361aee7e494c776f73cc3fbd6 = $(`<div id="html_33c24c9361aee7e494c776f73cc3fbd6" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W40<br>         <b>Nazwa:</b> Wilcza<br>         <b>Dzielnica:</b> Śródmieście<br>         <b>Stężenie radonu:</b> 3.73 Bq/l<br>         <b>Niepewność:</b> ±0.408<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_291952b425393ec2a8b192998e05046c.setContent(html_33c24c9361aee7e494c776f73cc3fbd6);
+            
+        
+
+        circle_marker_024fd43fd241cbb8086fac309efee8fa.bindPopup(popup_291952b425393ec2a8b192998e05046c)
+        ;
+
+        
+    
+    
+            var circle_marker_7a4be6d5064e47e813f0eb77fcd61520 = L.circleMarker(
+                [52.25493582453209, 21.00590674052018],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_a521b5c343eaca79689fbef7945312aa = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_13b16e6edda67a167d9680f2fa255f4b = $(`<div id="html_13b16e6edda67a167d9680f2fa255f4b" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W41<br>         <b>Nazwa:</b> Wójtkowska 11<br>         <b>Dzielnica:</b> Śródmieście<br>         <b>Stężenie radonu:</b> 2.61 Bq/l<br>         <b>Niepewność:</b> ±0.293<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_a521b5c343eaca79689fbef7945312aa.setContent(html_13b16e6edda67a167d9680f2fa255f4b);
+            
+        
+
+        circle_marker_7a4be6d5064e47e813f0eb77fcd61520.bindPopup(popup_a521b5c343eaca79689fbef7945312aa)
+        ;
+
+        
+    
+    
+            var circle_marker_2003db5c1a8e985e9b455fdff3c2c991 = L.circleMarker(
+                [52.27216939981172, 21.050052369762263],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_4bef612b2aeabc21f53eb443d91002ee = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_e0eba0e57ddeca590b76409014a19daa = $(`<div id="html_e0eba0e57ddeca590b76409014a19daa" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W42<br>         <b>Nazwa:</b> Kołowa<br>         <b>Dzielnica:</b> Targówek<br>         <b>Stężenie radonu:</b> 9.013 Bq/l<br>         <b>Niepewność:</b> ±0.883<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_4bef612b2aeabc21f53eb443d91002ee.setContent(html_e0eba0e57ddeca590b76409014a19daa);
+            
+        
+
+        circle_marker_2003db5c1a8e985e9b455fdff3c2c991.bindPopup(popup_4bef612b2aeabc21f53eb443d91002ee)
+        ;
+
+        
+    
+    
+            var circle_marker_9045e8544b279a274388d8f5a8913fbd = L.circleMarker(
+                [52.289108410112405, 21.026819865107797],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_764a115497a1673e9259ca2d6b6d8272 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_adfa742cc00e6c25f8ef8b8d14fa5585 = $(`<div id="html_adfa742cc00e6c25f8ef8b8d14fa5585" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W43<br>         <b>Nazwa:</b> Poborzańska<br>         <b>Dzielnica:</b> Targówek<br>         <b>Stężenie radonu:</b> 19.146 Bq/l<br>         <b>Niepewność:</b> ±1.606<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_764a115497a1673e9259ca2d6b6d8272.setContent(html_adfa742cc00e6c25f8ef8b8d14fa5585);
+            
+        
+
+        circle_marker_9045e8544b279a274388d8f5a8913fbd.bindPopup(popup_764a115497a1673e9259ca2d6b6d8272)
+        ;
+
+        
+    
+    
+            var circle_marker_8eb61ab3cc742e02f61a3fe544312b58 = L.circleMarker(
+                [52.29578448331544, 21.029358815570937],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_ae10811bad0785cf8a9b3d8732e866e2 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_e25092d7c9da9c786582e995e7b660bb = $(`<div id="html_e25092d7c9da9c786582e995e7b660bb" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W44<br>         <b>Nazwa:</b> Suwalska<br>         <b>Dzielnica:</b> Targówek<br>         <b>Stężenie radonu:</b> 17.938 Bq/l<br>         <b>Niepewność:</b> ±1.527<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_ae10811bad0785cf8a9b3d8732e866e2.setContent(html_e25092d7c9da9c786582e995e7b660bb);
+            
+        
+
+        circle_marker_8eb61ab3cc742e02f61a3fe544312b58.bindPopup(popup_ae10811bad0785cf8a9b3d8732e866e2)
+        ;
+
+        
+    
+    
+            var circle_marker_2f8e5ef5817a7861c62c801a3e3a2b92 = L.circleMarker(
+                [52.18649501561657, 20.8870002144245],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_d44c40ac6cf45ef64915b3f70d832d60 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_8751391f38e3c15b543165c06d9d9902 = $(`<div id="html_8751391f38e3c15b543165c06d9d9902" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W45<br>         <b>Nazwa:</b> aleja Bzów 22<br>         <b>Dzielnica:</b> Ursus<br>         <b>Stężenie radonu:</b> 3.505 Bq/l<br>         <b>Niepewność:</b> ±0.387<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_d44c40ac6cf45ef64915b3f70d832d60.setContent(html_8751391f38e3c15b543165c06d9d9902);
+            
+        
+
+        circle_marker_2f8e5ef5817a7861c62c801a3e3a2b92.bindPopup(popup_d44c40ac6cf45ef64915b3f70d832d60)
+        ;
+
+        
+    
+    
+            var circle_marker_0b045449b7d3170d76d4eb9829d25eee = L.circleMarker(
+                [52.19261933933774, 20.89410463361234],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_8172c5c8a7484a42c5012a648d89c109 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_8988ce722bc1d5d71bf6980809f00800 = $(`<div id="html_8988ce722bc1d5d71bf6980809f00800" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W46<br>         <b>Nazwa:</b> Walerego Sławka<br>         <b>Dzielnica:</b> Ursus<br>         <b>Stężenie radonu:</b> 19.762 Bq/l<br>         <b>Niepewność:</b> ±1.628<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_8172c5c8a7484a42c5012a648d89c109.setContent(html_8988ce722bc1d5d71bf6980809f00800);
+            
+        
+
+        circle_marker_0b045449b7d3170d76d4eb9829d25eee.bindPopup(popup_8172c5c8a7484a42c5012a648d89c109)
+        ;
+
+        
+    
+    
+            var circle_marker_2d51e70ba554bb1581e25ad99d8fffc1 = L.circleMarker(
+                [52.15776866865312, 21.046903717947878],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_ba9df8ab3d6caf44a1aed10d73016573 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_18f9fc041733360e74d6eabdc84189c0 = $(`<div id="html_18f9fc041733360e74d6eabdc84189c0" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W47<br>         <b>Nazwa:</b> Ciszewskiego 10<br>         <b>Dzielnica:</b> Ursynów<br>         <b>Stężenie radonu:</b> 55.374 Bq/l<br>         <b>Niepewność:</b> ±3.093<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_ba9df8ab3d6caf44a1aed10d73016573.setContent(html_18f9fc041733360e74d6eabdc84189c0);
+            
+        
+
+        circle_marker_2d51e70ba554bb1581e25ad99d8fffc1.bindPopup(popup_ba9df8ab3d6caf44a1aed10d73016573)
+        ;
+
+        
+    
+    
+            var circle_marker_3a78ccfa0ae0d8c85e3372bd5581bd8f = L.circleMarker(
+                [52.13453487891896, 21.018686890242346],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_5720c7c51c78e452fb5e8a5c54030425 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_706616df8baf4abe1a6baf6008201b15 = $(`<div id="html_706616df8baf4abe1a6baf6008201b15" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W48<br>         <b>Nazwa:</b> Dzierzby<br>         <b>Dzielnica:</b> Ursynów<br>         <b>Stężenie radonu:</b> 8.089 Bq/l<br>         <b>Niepewność:</b> ±0.811<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_5720c7c51c78e452fb5e8a5c54030425.setContent(html_706616df8baf4abe1a6baf6008201b15);
+            
+        
+
+        circle_marker_3a78ccfa0ae0d8c85e3372bd5581bd8f.bindPopup(popup_5720c7c51c78e452fb5e8a5c54030425)
+        ;
+
+        
+    
+    
+            var circle_marker_abced36f78a140ceeb4ad73e1d8ca0e5 = L.circleMarker(
+                [52.15514165356602, 21.02941437804619],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_79d7a3c171fecf4999deb602184f6470 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_b1b919e7e47c778c0e65e10a6be03c0a = $(`<div id="html_b1b919e7e47c778c0e65e10a6be03c0a" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W49<br>         <b>Nazwa:</b> Romera 2<br>         <b>Dzielnica:</b> Ursynów<br>         <b>Stężenie radonu:</b> 14.241 Bq/l<br>         <b>Niepewność:</b> ±1.232<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_79d7a3c171fecf4999deb602184f6470.setContent(html_b1b919e7e47c778c0e65e10a6be03c0a);
+            
+        
+
+        circle_marker_abced36f78a140ceeb4ad73e1d8ca0e5.bindPopup(popup_79d7a3c171fecf4999deb602184f6470)
+        ;
+
+        
+    
+    
+            var circle_marker_49dd568ff288ad8a0c1de432dd1dd621 = L.circleMarker(
+                [52.23866784476377, 21.145567309023104],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_229a88d7d1b3a3375f84e0521bf5429f = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_94620e24eee12334539866d45ca27e5b = $(`<div id="html_94620e24eee12334539866d45ca27e5b" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W50<br>         <b>Nazwa:</b> Marysin Wawerski<br>         <b>Dzielnica:</b> Wawer<br>         <b>Stężenie radonu:</b> 7.718 Bq/l<br>         <b>Niepewność:</b> ±0.763<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_229a88d7d1b3a3375f84e0521bf5429f.setContent(html_94620e24eee12334539866d45ca27e5b);
+            
+        
+
+        circle_marker_49dd568ff288ad8a0c1de432dd1dd621.bindPopup(popup_229a88d7d1b3a3375f84e0521bf5429f)
+        ;
+
+        
+    
+    
+            var circle_marker_10d22b3d54eeaf816cc09a69444a605b = L.circleMarker(
+                [52.17378049280913, 21.071296171466734],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_9ad9fa059f8eb31bb9c39e1fe42eb302 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_e6bd009701cbf98ed362b5c832d5f994 = $(`<div id="html_e6bd009701cbf98ed362b5c832d5f994" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W51<br>         <b>Nazwa:</b> Królowej Marysieńki 21<br>         <b>Dzielnica:</b> Wilanów<br>         <b>Stężenie radonu:</b> 6.93 Bq/l<br>         <b>Niepewność:</b> ±0.699<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_9ad9fa059f8eb31bb9c39e1fe42eb302.setContent(html_e6bd009701cbf98ed362b5c832d5f994);
+            
+        
+
+        circle_marker_10d22b3d54eeaf816cc09a69444a605b.bindPopup(popup_9ad9fa059f8eb31bb9c39e1fe42eb302)
+        ;
+
+        
+    
+    
+            var circle_marker_6c0cac72eb2418a1c539463e3245c33c = L.circleMarker(
+                [52.17356150992524, 21.07872269499465],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_22459d9f5d63bb72acf390ed05fa85a4 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_e53b90a30aaa92c2e6b5e49ad6d06b5b = $(`<div id="html_e53b90a30aaa92c2e6b5e49ad6d06b5b" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W52<br>         <b>Nazwa:</b> Lentza<br>         <b>Dzielnica:</b> Wilanów<br>         <b>Stężenie radonu:</b> 3.759 Bq/l<br>         <b>Niepewność:</b> ±0.409<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_22459d9f5d63bb72acf390ed05fa85a4.setContent(html_e53b90a30aaa92c2e6b5e49ad6d06b5b);
+            
+        
+
+        circle_marker_6c0cac72eb2418a1c539463e3245c33c.bindPopup(popup_22459d9f5d63bb72acf390ed05fa85a4)
+        ;
+
+        
+    
+    
+            var circle_marker_8dfb6ed8b062099d8f44f343cad20b55 = L.circleMarker(
+                [52.203187757235085, 20.922972831014114],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_42744b0821c664aa344a67fb7d8303f2 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_ac20cde58b6357ca9e5779161925b2ea = $(`<div id="html_ac20cde58b6357ca9e5779161925b2ea" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W53<br>         <b>Nazwa:</b> Cietrzewia<br>         <b>Dzielnica:</b> Włochy<br>         <b>Stężenie radonu:</b> 5.155 Bq/l<br>         <b>Niepewność:</b> ±0.54<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_42744b0821c664aa344a67fb7d8303f2.setContent(html_ac20cde58b6357ca9e5779161925b2ea);
+            
+        
+
+        circle_marker_8dfb6ed8b062099d8f44f343cad20b55.bindPopup(popup_42744b0821c664aa344a67fb7d8303f2)
+        ;
+
+        
+    
+    
+            var circle_marker_d764e80ded54f14684556cb4874e64b4 = L.circleMarker(
+                [52.17997101603469, 20.97630644206509],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_292ce441e61ed117e19721d4f27cbede = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_ccb1676a0079d2cf7ee5dbe0a2ab1801 = $(`<div id="html_ccb1676a0079d2cf7ee5dbe0a2ab1801" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W54<br>         <b>Nazwa:</b> Komitetu Obrony Robotników 39<br>         <b>Dzielnica:</b> Włochy<br>         <b>Stężenie radonu:</b> 1.103 Bq/l<br>         <b>Niepewność:</b> ±0.13<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_292ce441e61ed117e19721d4f27cbede.setContent(html_ccb1676a0079d2cf7ee5dbe0a2ab1801);
+            
+        
+
+        circle_marker_d764e80ded54f14684556cb4874e64b4.bindPopup(popup_292ce441e61ed117e19721d4f27cbede)
+        ;
+
+        
+    
+    
+            var circle_marker_9b9e0c7d26d7233a9a45e2ded0d69f8c = L.circleMarker(
+                [52.20783044438121, 20.907582635641642],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_5caed8bbd0493ea5d1fe51d8bf2a9cb8 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_990cdd424465baa798cea6f894eb6a13 = $(`<div id="html_990cdd424465baa798cea6f894eb6a13" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W55<br>         <b>Nazwa:</b> Łuczek<br>         <b>Dzielnica:</b> Włochy<br>         <b>Stężenie radonu:</b> 13.986 Bq/l<br>         <b>Niepewność:</b> ±1.215<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_5caed8bbd0493ea5d1fe51d8bf2a9cb8.setContent(html_990cdd424465baa798cea6f894eb6a13);
+            
+        
+
+        circle_marker_9b9e0c7d26d7233a9a45e2ded0d69f8c.bindPopup(popup_5caed8bbd0493ea5d1fe51d8bf2a9cb8)
+        ;
+
+        
+    
+    
+            var circle_marker_795c3e97cfbfa0badf16dcea1db74532 = L.circleMarker(
+                [52.177278931865814, 20.939142020628545],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_435101ff86756218381b66278bc8e482 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_ee7720a3720569133bb5328fa0f7242b = $(`<div id="html_ee7720a3720569133bb5328fa0f7242b" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W56<br>         <b>Nazwa:</b> Malownicza 31<br>         <b>Dzielnica:</b> Włochy<br>         <b>Stężenie radonu:</b> 0.0 Bq/l<br>         <b>Niepewność:</b> ±0.0<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_435101ff86756218381b66278bc8e482.setContent(html_ee7720a3720569133bb5328fa0f7242b);
+            
+        
+
+        circle_marker_795c3e97cfbfa0badf16dcea1db74532.bindPopup(popup_435101ff86756218381b66278bc8e482)
+        ;
+
+        
+    
+    
+            var circle_marker_525d29fce555cede53435bd89146949e = L.circleMarker(
+                [52.23657761066316, 20.990141549883038],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_e695c7c2e45b5cfd9a24da43172572fa = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_02095942c864692db740f73f1a06dda4 = $(`<div id="html_02095942c864692db740f73f1a06dda4" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W57<br>         <b>Nazwa:</b> Chłodna 15<br>         <b>Dzielnica:</b> Wola<br>         <b>Stężenie radonu:</b> 1.848 Bq/l<br>         <b>Niepewność:</b> ±0.208<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_e695c7c2e45b5cfd9a24da43172572fa.setContent(html_02095942c864692db740f73f1a06dda4);
+            
+        
+
+        circle_marker_525d29fce555cede53435bd89146949e.bindPopup(popup_e695c7c2e45b5cfd9a24da43172572fa)
+        ;
+
+        
+    
+    
+            var circle_marker_26343d6720487db200458f24a1bca571 = L.circleMarker(
+                [52.24201328219155, 20.947578445792924],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_766ac87e17b04344d6d4f49fdbeafe5d = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_7bf2d0855747189ab5937134e1347008 = $(`<div id="html_7bf2d0855747189ab5937134e1347008" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W58<br>         <b>Nazwa:</b> Deotymy 25<br>         <b>Dzielnica:</b> Wola<br>         <b>Stężenie radonu:</b> 4.098 Bq/l<br>         <b>Niepewność:</b> ±0.441<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_766ac87e17b04344d6d4f49fdbeafe5d.setContent(html_7bf2d0855747189ab5937134e1347008);
+            
+        
+
+        circle_marker_26343d6720487db200458f24a1bca571.bindPopup(popup_766ac87e17b04344d6d4f49fdbeafe5d)
+        ;
+
+        
+    
+    
+            var circle_marker_071e56fa32830b03f568930f8b1c5664 = L.circleMarker(
+                [52.23720065371068, 20.937214083480104],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_3626c5935a1c0468db68fc2151dd5afc = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_c9742a57b512ad9a31b348119143f442 = $(`<div id="html_c9742a57b512ad9a31b348119143f442" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W59<br>         <b>Nazwa:</b> Krępowieckiego 8<br>         <b>Dzielnica:</b> Wola<br>         <b>Stężenie radonu:</b> 15.896 Bq/l<br>         <b>Niepewność:</b> ±1.346<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_3626c5935a1c0468db68fc2151dd5afc.setContent(html_c9742a57b512ad9a31b348119143f442);
+            
+        
+
+        circle_marker_071e56fa32830b03f568930f8b1c5664.bindPopup(popup_3626c5935a1c0468db68fc2151dd5afc)
+        ;
+
+        
+    
+    
+            var circle_marker_6a6d454e4a3faea1b53963ab5e4d4b8e = L.circleMarker(
+                [52.24671099664045, 20.982743981193302],
+                {"bubblingMouseEvents": true, "color": "green", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "green", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_5396ca2e9f7d95b3679d2e7f82a070b9 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_5e29e99528b5f6470f3c158c2946b328 = $(`<div id="html_5e29e99528b5f6470f3c158c2946b328" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W60<br>         <b>Nazwa:</b> Smocza 19<br>         <b>Dzielnica:</b> Wola<br>         <b>Stężenie radonu:</b> 1.879 Bq/l<br>         <b>Niepewność:</b> ±0.213<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_5396ca2e9f7d95b3679d2e7f82a070b9.setContent(html_5e29e99528b5f6470f3c158c2946b328);
+            
+        
+
+        circle_marker_6a6d454e4a3faea1b53963ab5e4d4b8e.bindPopup(popup_5396ca2e9f7d95b3679d2e7f82a070b9)
+        ;
+
+        
+    
+    
+            var circle_marker_a6bd61af47c300d2dd8fcbdff5722245 = L.circleMarker(
+                [52.23517400765072, 20.974142137530233],
+                {"bubblingMouseEvents": true, "color": "yellow", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "yellow", "fillOpacity": 0.7, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 10, "stroke": true, "weight": 3}
+            ).addTo(marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9);
+        
+    
+        var popup_457d62dc27b0708a7c01b93cadcf2567 = L.popup({
+  "maxWidth": 400,
+});
+
+        
+            
+                var html_671de7b77f00d11376d049851c4e75b4 = $(`<div id="html_671de7b77f00d11376d049851c4e75b4" style="width: 100.0%; height: 100.0%;">         <b>ID studni:</b> W61<br>         <b>Nazwa:</b> Wolska 29<br>         <b>Dzielnica:</b> Wola<br>         <b>Stężenie radonu:</b> 12.163 Bq/l<br>         <b>Niepewność:</b> ±1.138<br>         <b>Data:</b> Rozicki 2018<br>         <b>Komentarz:</b> nan         </div>`)[0];
+                popup_457d62dc27b0708a7c01b93cadcf2567.setContent(html_671de7b77f00d11376d049851c4e75b4);
+            
+        
+
+        circle_marker_a6bd61af47c300d2dd8fcbdff5722245.bindPopup(popup_457d62dc27b0708a7c01b93cadcf2567)
+        ;
+
+        
+    
+    
+            marker_cluster_626953fcc3a65cc4f3fae577c02d5fa9.addTo(feature_group_52379521bb1a992839971968187fa359);
+        
+    
+            feature_group_52379521bb1a992839971968187fa359.addTo(map_06fc3c87f4ab81aca9b769a772d69a42);
+        
+    
+            var feature_group_ef1b51b826d56b44a237016ec3f035f0 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var heat_map_66c1aff3a442aec442cde886d2f30378 = L.heatLayer(
+                [[52.228912, 20.917223, 13.913], [52.24931, 20.880176, 2.16], [52.229795, 20.907121, 6.508], [52.243487, 20.914665, 10.778], [52.260825, 20.919599, 1.815], [52.234104, 20.910342, 5.697], [52.22548, 20.902418, 4.957], [52.222127, 20.901225, 2.841], [52.223694, 20.915615, 7.437], [52.219976, 20.899149, 4.268], [52.23654, 20.899708, 4.993], [52.230119, 20.898409, 23.333], [52.324659, 20.947698, 12.275], [52.313957, 20.95752, 12.485], [52.308607, 20.924101, 10.947], [52.300592, 20.881494, 5.24], [52.272606, 20.958578, 13.611], [52.281199, 20.97679, 3.046], [52.267329, 20.952655, 7.938], [52.282391, 20.936587, 23.066], [52.171842, 21.024097, 7.066], [52.182258, 21.048236, 7.14], [52.219344, 20.9795, 5.371], [52.21426, 20.981587, 3.298], [52.243127, 21.077312, 5.665], [52.228096, 21.067808, 15.598], [52.239809, 21.086073, 15.16], [52.234009, 21.08144, 10.323], [52.246474, 21.104223, 20.337], [52.236576, 21.062061, 16.795], [52.250286, 21.027866, 10.05], [52.260648, 21.030247, 4.82], [52.261844, 21.040524, 4.443], [52.249176, 20.998558, 4.781], [52.244907, 21.019486, 0.446], [52.255022, 20.991142, 6.732], [52.230898, 21.028226, 9.163], [52.218115, 21.021182, 7.147], [52.232154, 21.039782, 13.248], [52.224351, 21.012041, 3.73], [52.255019, 21.00584, 2.61], [52.272209, 21.050025, 9.013], [52.289169, 21.026748, 19.146], [52.295779, 21.029348, 17.938], [52.186519, 20.88698, 3.505], [52.192623, 20.894088, 19.762], [52.157783, 21.046825, 55.374], [52.13454, 21.018672, 8.089], [52.155189, 21.029385, 14.241], [52.238686, 21.145487, 7.718], [52.173862, 21.071269, 6.93], [52.173575, 21.078711, 3.759], [52.203262, 20.922933, 5.155], [52.18007, 20.976285, 1.103], [52.207889, 20.907499, 13.986], [52.177363, 20.939128, 0.0], [52.23663, 20.990099, 1.848], [52.24208, 20.947544, 4.098], [52.237219, 20.937122, 15.896], [52.246707, 20.982722, 1.879], [52.23517, 20.974106, 12.163], [52.313957, 20.95752, 6.3], [52.246474, 21.104223, 14.3], [52.236576, 21.062061, 7.0], [52.289169, 21.026748, 12.7], [52.295779, 21.029348, 9.5], [52.157783, 21.046825, 32.7], [52.157783, 21.046825, 34.6], [52.155189, 21.029385, 12.6], [52.155189, 21.029385, 23.8], [52.203262, 20.922933, 4.3]],
+                {
+  "minOpacity": 0.5,
+  "maxZoom": 13,
+  "radius": 15,
+  "blur": 10,
+}
+            );
+        
+    
+            heat_map_66c1aff3a442aec442cde886d2f30378.addTo(feature_group_ef1b51b826d56b44a237016ec3f035f0);
+        
+    
+            feature_group_ef1b51b826d56b44a237016ec3f035f0.addTo(map_06fc3c87f4ab81aca9b769a772d69a42);
+        
+    
+            var layer_control_eb8d8cd8c09da33a2a1b88d125349fe0_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_7518352a4f1bffa378152b89a3838093,
+                },
+                overlays :  {
+                    "Aksamit 2023" : feature_group_ad7cd8a24cc836976f8174e2c7d44a0e,
+                    "Aksamit-Podgorska 2024" : feature_group_d8608060039f77c1eba6a7f9b3a847bd,
+                    "Rozicki 2018" : feature_group_52379521bb1a992839971968187fa359,
+                    "Heatmap" : feature_group_ef1b51b826d56b44a237016ec3f035f0,
+                },
+            };
+            let layer_control_eb8d8cd8c09da33a2a1b88d125349fe0 = L.control.layers(
+                layer_control_eb8d8cd8c09da33a2a1b88d125349fe0_layers.base_layers,
+                layer_control_eb8d8cd8c09da33a2a1b88d125349fe0_layers.overlays,
+                {
+  "position": "topleft",
+  "collapsed": false,
+  "autoZIndex": true,
+}
+            ).addTo(map_06fc3c87f4ab81aca9b769a772d69a42);
+
+        
+</script>
+</html>
