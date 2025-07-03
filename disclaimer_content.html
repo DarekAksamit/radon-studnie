@@ -1,0 +1,35 @@
+<div style="position: fixed; top: 10px; right: 10px; width: 400px; 
+            background-color: white; z-index: 9999; padding: 10px; 
+            border: 2px solid grey; font-size: 14px; box-shadow: 2px 2px 6px rgba(0,0,0,0.2);">
+
+  <div style="text-align: center;">
+    <img src="logo_pw.jpg" alt="PW" height="40" style="margin: 5px;">
+    <img src="logo_ahs.jpg" alt="AHS" height="40" style="margin: 5px;">
+  </div>
+
+  <div style="margin-top: 5px;">
+    <button onclick="showDisclaimer('pl')">PL</button>
+    <button onclick="showDisclaimer('en')">EN</button>
+  </div>
+
+  <div id="disclaimer-pl" class="disclaimer-text" style="margin-top: 10px; display: none;">
+    <p>Praca powstała jako kontynuacja grantu <strong>AHS Radon Hunt</strong> przyznanego <a href='https://akademeia.edu.pl/' target='_blank'>Akademia High School</a> przez konsorcjum RadoNorm i stanowi część przygotowań realizacji projektu Erasmus+: <strong>Citizen Science for Radiation Protection</strong> złożonego przez <a href='https://pw.edu.pl/' target='_blank'>Politechnikę Warszawską</a>. Dane: Dariusz Aksamit, Zuzanna Podgórska, Kamil Rózicki. Visualization: Dariusz Aksamit.
+    <p><i>Licencja: CC-BY 4.0</i></p>
+    <img src="CC_BY.png" alt="CC-BY" height="30">
+
+  </div>
+
+  <div id="disclaimer-en" class="disclaimer-text" style="margin-top: 10px; display: block;">
+    <p>This work was created as a continuation of the <strong>AHS Radon Hunt</strong> grant awarded to <a href='https://akademeia.edu.pl/' target='_blank'>Akademia High School</a> by the RadoNorm consortium and as part of the preparation for the Erasmus+ project <strong>Citizen Science for Radiation Protection</strong> submitted by <a href='https://pw.edu.pl/' target='_blank'>Warsaw University of Technology</a>. Data: Dariusz Aksamit, Zuzanna Podgórska, Kamil Rózicki. Visualization: Dariusz Aksamit.</p>
+        <p><i>License: CC-BY 4.0</i></p>
+    <img src="CC_BY.png" alt="CC-BY" height="30">
+
+  </div>
+</div>
+
+<script>
+function showDisclaimer(lang) {
+  document.querySelectorAll('.disclaimer-text').forEach(div => div.style.display = 'none');
+  document.getElementById('disclaimer-' + lang).style.display = 'block';
+}
+</script>
